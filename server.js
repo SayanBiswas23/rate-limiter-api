@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv'; // Import dotenv and configure it
 import connectDB from './src/config/db.js'; // Corrected import
 import userroutes from './src/routes/users.routes.js';
-import { ratelimiter } from './src/middleware/middleware.ratelimiter.js';
+import { ratelimiter } from './src/middleware/ratelimiter.middleware.js';
 
 const app = express();
 dotenv.config();
