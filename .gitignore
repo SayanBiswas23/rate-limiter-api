@@ -20,6 +20,9 @@ logs/
 dist/
 build/
 
+# Dependency directories
+playground-2.mongodb.js
+
 # OS generated files
 .DS_Store
 Thumbs.db
