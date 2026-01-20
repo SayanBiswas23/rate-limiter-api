@@ -3,17 +3,16 @@ import dotenv from 'dotenv'; // Import dotenv and configure it
 import connectDB from './src/config/db.js'; // Corrected import
 import userroutes from './src/routes/users.routes.js';
 import { ratelimiter } from './src/middleware/ratelimiter.middleware.js';
-dotenv.config({
-});
+dotenv.config(); // Configure environment variables
 
 const app = express();
 // Connect to the database before starting the server
 try {
     await connectDB();
+    console.log('Database connected successfully');
 } catch (error) {
-    res.status(500).json({
-        msg: 'Database connection failed;',
-    });
+    console.error("Fatal Error: Could not connect to the database", error.message);
+    process.exit(1); // Exit the process if DB connection fails
 }
 
 app.use(express.json()); // Corrected middleware usage

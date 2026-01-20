@@ -2,7 +2,10 @@ import jwt from 'jsonwebtoken';
 import { User } from '../model/user.model.js';
 
 //* Generates a JSON Web Token (JWT) for a given user ID.
-const generatetoken = (id) => {
+const generateToken = (id) => {
+    if (!process.env.JWT_SECRET) {
+        throw new Error('JWT_SECRET is not defined in environment');
+    }
     return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: '30d',
     });
@@ -14,6 +17,10 @@ const generatetoken = (id) => {
 
 export const registerUser = async (req, res) => {
     const { email, name, password } = req.body;
+
+    if (!email || !name || !password) {
+        return res.status(400).json({ message: 'Please add all fields' });
+    }
 
     try {
         // Check if a user with the given email already exists in the database.
@@ -39,7 +46,7 @@ export const registerUser = async (req, res) => {
                 _id: user.id,
                 name: user.name,
                 email: user.email,
-                token: generatetoken(user._id), // Generate and include the token.
+                token: generateToken(user._id), // Generate and include the token.
             });
         } else {
             // This case is unlikely if validation is correct, but handles other creation failures.
@@ -54,8 +61,12 @@ export const registerUser = async (req, res) => {
 //* @desc     Authenticate a user and get a token (login)
 //* @route    POST /api/users/login
 //* @access   Public
-export const loginuser = async (req, res) => {
+export const loginUser = async (req, res) => {
     const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Please add all fields' });
+    }
 
     try {
         // Find the user by their email address.
@@ -68,7 +79,7 @@ export const loginuser = async (req, res) => {
                 _id: user.id,
                 name: user.name,
                 email: user.email,
-                token: generatetoken(user._id),
+                token: generateToken(user._id),
             });
         } else {
             // If authentication fails, return a 401 Unauthorized status.

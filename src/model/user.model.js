@@ -7,6 +7,7 @@ const userSchmea = new mongoose.Schema(
         name: {
             type: String,
             required: [true, 'Name cannot be empty'],
+            minlength: 3,
         },
         email: {
             type: String,
